@@ -43,11 +43,16 @@ posts_dict = {
 
 
 def index(request):
+    posts = list()
+    for post_id, post in posts_dict.items():
+        new_post = post.copy()
+        new_post['id'] = str(post_id)
+        posts.append(new_post)
     return render(
         request=request,
         template_name='blog/index.html',
         context={
-            "posts": posts_dict[::-1],
+            "posts": posts,
         },
     )
 
