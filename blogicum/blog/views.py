@@ -1,8 +1,8 @@
+from django.http import Http404
 from django.shortcuts import render
 
-posts = [
-    {
-        'id': 0,
+posts_dict = {
+    0: {
         'location': 'Остров отчаянья',
         'date': '30 сентября 1659 года',
         'category': 'travel',
@@ -13,8 +13,7 @@ posts = [
                 полумёртвым на берег этого проклятого острова,
                 который назвал островом Отчаяния.''',
     },
-    {
-        'id': 1,
+    1: {
         'location': 'Остров отчаянья',
         'date': '1 октября 1659 года',
         'category': 'not-my-day',
@@ -29,8 +28,7 @@ posts = [
                 построить баркас, на котором и выбрались бы из этого
                 гиблого места.''',
     },
-    {
-        'id': 2,
+    2: {
         'location': 'Остров отчаянья',
         'date': '25 октября 1659 года',
         'category': 'not-my-day',
@@ -41,7 +39,7 @@ posts = [
                 Весь этот день я хлопотал  около вещей: укрывал и
                 укутывал их, чтобы не испортились от дождя.''',
     },
-]
+}
 
 
 def index(request):
@@ -49,17 +47,21 @@ def index(request):
         request=request,
         template_name='blog/index.html',
         context={
-            "posts": posts[::-1],
+            "posts": posts_dict[::-1],
         },
     )
 
 
-def post_detail(request, id):
+def post_detail(request, post_id):
+    if not isinstance(post_id, int):
+        raise Http404("post_id is not int")
+    if post_id not in posts_dict:
+        raise Http404("post_id is not in posts_dict")
     return render(
         request=request,
         template_name='blog/detail.html',
         context={
-            "post": posts[id],
+            "post": posts_dict[post_id],
         },
     )
 
